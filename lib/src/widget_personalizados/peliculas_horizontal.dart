@@ -25,7 +25,7 @@ class PeliculasHorizontal extends StatelessWidget {
     });
 
     return Container(
-      height: _medidaPantalla.height * 0.30,
+      height: _medidaPantalla.height * 0.25,
       child: PageView.builder(
         pageSnapping: false,
         controller: _paginaCtl,
