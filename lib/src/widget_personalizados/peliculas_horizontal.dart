@@ -17,7 +17,7 @@ class PeliculasHorizontal extends StatelessWidget {
     _paginaCtl.addListener(() {
       if (_paginaCtl.position.pixels >=
           _paginaCtl.position.maxScrollExtent - 200) {
-        print('cargas siguiente peliculas');
+        print('cargas siguiente peliculas*');
         siguientePagina();
       } else {
         print('...');
@@ -78,32 +78,5 @@ class PeliculasHorizontal extends StatelessWidget {
     );
   }
 
-/*
-  List<Widget> _tarjetas(BuildContext context) {
-    return peliculas.map((pelicula) {
-      return Container(
-        margin: EdgeInsets.only(right: 15.0),
-        child: Column(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: FadeInImage(
-                placeholder: AssetImage('assets/img/no-image.jpg'),
-                image: NetworkImage(pelicula.getImagen()),
-                fit: BoxFit.cover,
-                height: 150.0,
-              ),
-            ),
-            SizedBox(height: 5.0),
-            Text(
-              pelicula.title,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.caption,
-            )
-          ],
-        ),
-      );
-    }).toList();
-  }
-  */
+
 }
