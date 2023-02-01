@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+   // throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -40,7 +40,7 @@ android {
 
         
     }
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -48,11 +48,11 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.darwinuzcategui.peliculas"
+        applicationId "com.darwinuzcategui.productosdx3d"
         minSdkVersion 23
-        targetSdkVersion 30
-        versionCode 3
-        versionName "1.0.3"
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0.0"
     }
 
     signingConfigs {
@@ -66,6 +66,12 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            //minifyEnabled true
+            //android.enableR8=false
+            //useProguard true
+            
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }

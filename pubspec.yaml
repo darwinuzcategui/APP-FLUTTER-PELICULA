@@ -1,5 +1,5 @@
-name: peliculas
-description: Una app para Consultar Pelculas 
+name: productos
+description: Una app para Consultar Productos
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -29,7 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_swiper: ^1.1.6
-  http: ^0.12.2
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
@@ -39,8 +39,8 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icon/movie-icon.png"
-  adaptive_icon_background: "assets/icon/movie-icon.png"
+  image_path: "assets/icon/barcode2.png"
+  adaptive_icon_background: "assets/icon/barcode2.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
