@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:peliculas/models/peliculas_model.dart';
-import 'package:peliculas/providers/peliculas_providers.dart';
+import '../models/productos_model.dart';
+import '../providers/productos_providers.dart';
 
 class BuscarDatos extends SearchDelegate {
+  String seleccion = "";
 
-  String seleccion;
+  final productosProvider = new ProductosProvider();
 
-  final peliculasProvider = new PeliculasProvider();
-
-
-  final peliculas= [
+  final productos = [
     'Jordan',
     'Superman',
     'Batman',
@@ -21,14 +19,7 @@ class BuscarDatos extends SearchDelegate {
     'Aquam  de Papel'
   ];
 
-  final peliculasRecientes = [
-    'Superman',
-    'Guason',
-    'Aquaman'
-    
-  ];
-
-
+  final productosRecientes = ['Superman', 'Guason', 'Aquaman'];
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -38,7 +29,7 @@ class BuscarDatos extends SearchDelegate {
         icon: Icon(Icons.clear),
         onPressed: () {
           print('click !!!');
-          query='';
+          query = '';
         },
       )
     ];
@@ -61,15 +52,15 @@ class BuscarDatos extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    // la intruccion que crear losresultadosa mostra
+    // Crea los resultados que vamos a mostrar
     return Center(
-      child:Container(
+      child: Container(
         height: 100.0,
         width: 100.0,
-        color:Colors.orangeAccent,
+        color: Color.fromARGB(255, 223, 171, 0),
         child: Text(seleccion),
       ),
-      );
+    );
   }
 
   @override
@@ -81,83 +72,41 @@ class BuscarDatos extends SearchDelegate {
     }
 
     return FutureBuilder(
-      future: peliculasProvider.buscarPelicula(query),
-      builder: (BuildContext context, AsyncSnapshot<List<Pelicula>> snapshot) {
-        
-        if( snapshot.hasData ) {
-
-          final peliculas = snapshot.data;
-
+      future: productosProvider.buscarD3xdProductos(query),
+      builder: (BuildContext context, AsyncSnapshot<List<Producto>> snapshot) {
+        print(query);
+        if (snapshot.hasData) {
+          final productos = snapshot.data;
 
           return ListView(
-            children:peliculas.map((pelicula){
-              return ListTile(
-                leading: FadeInImage(
-                  // assets/img/no-image.jpg
-                  placeholder: AssetImage('assets/img/no-image.jpg'), 
-                  image: NetworkImage(pelicula.getImagen()),
-                  width:50.0,
-                  fit: BoxFit.contain,
-
-                  ),
-                  title: Text(pelicula.title),
-                  subtitle: Text(pelicula.originalTitle),
-                  onTap: (){
-                    print('pulsaste aqui');
-                    //primero cerramos la busqueda
-                    close(context, null);
-                    pelicula.idUnico='';
-                    Navigator.pushNamed(context,'detalle',arguments: pelicula);
-
-                  },
-                  
-                  
-              );
-            }).toList()
-          );
+              children: productos.map((producto) {
+            return ListTile(
+              leading: FadeInImage(
+                // assets/img/no-image.jpg
+                placeholder: AssetImage('assets/img/no-image.jpg'),
+                image: NetworkImage(producto.getImagen()),
+                width: 50.0,
+                fit: BoxFit.contain,
+              ),
+              title: Text(producto.pdescribe),
+              subtitle: Text(producto.pventa1.toStringAsPrecision(3)),
+              onTap: () {
+                print('pulsaste aqui');
+                print(query);
+                //primero cerramos la busqueda
+                close(context, null);
+                producto.pcode = '';
+                //producto.pcode = 0;
+                Navigator.pushNamed(context, 'detalle', arguments: producto);
+              },
+            );
+          }).toList());
         } else {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-       
       },
     );
-
-   
   }
-
-
-//  @override
-//   Widget buildSuggestions(BuildContext context) {
-//     // es la sugrecia de cuando se ecribe
-
-//     final listaSugerida = (query.isEmpty)
-//                             ? peliculasRecientes
-//                             :peliculas.where(
-//                               (p)=>p.toLowerCase().startsWith(query.toLowerCase()) // quiere decir que retorna una lista de lo que se escribio es query
-//                               ).toList();
-//     return ListView.builder(
-//       itemCount: listaSugerida.length,
-//       itemBuilder: (context,i){
-//         return ListTile(
-//           leading: Icon(Icons.movie),
-//           title: Text(listaSugerida[i]),
-//           onTap: (){
-//             seleccion = listaSugerida[i];
-//             showResults(context);
-//           },
-
-
-//         );
-
-//       },
-
-//     );
-//   }
-
-
-
 }
-
-
