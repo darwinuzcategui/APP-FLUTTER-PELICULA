@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:productos/scan/scanearCodigo.dart';
 import '../pag/inicio_pagina.dart';
 import '../pag/producto_detalle.dart';
 
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (BuildContext context) => InicioPagina(),
         'detalle': (BuildContext context) => ProductoDetalle(),
+        "scan":(BuildContext context) => ScanearCodigo(),
       },
     );
   }

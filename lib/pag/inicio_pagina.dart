@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../buscar/buscar_delegate.dart';
+import '../scan/scanearCodigo.dart';
 import '../providers/productos_providers.dart';
 import '../widget_personalizados/card_swiper_widget.dart';
 import '../widget_personalizados/productos_horizontal.dart';
@@ -30,8 +31,9 @@ class InicioPagina extends StatelessWidget {
               tooltip: 'Scan',
               // //_scan
               onPressed: () {
-                showSearch(
-                    context: context, delegate: BuscarDatos(), query: '');
+                //Navigator.pushNamed(context, 'scan', arguments: producto);
+                Navigator.pushNamed(context, 'scan', arguments: ScanearCodigo());
+                //ScanearCodigo();
               },
             ),
           ],
@@ -56,7 +58,7 @@ class InicioPagina extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
           //print(snapshot.data);
-          return CardSwiper( productos: snapshot.data);
+          return CardSwiper(productos: snapshot.data);
         } else {
           return Container(
               height: 300.0, child: Center(child: CircularProgressIndicator()));

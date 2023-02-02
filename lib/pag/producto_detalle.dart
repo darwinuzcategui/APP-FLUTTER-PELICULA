@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:peliculas/models/actores_model.dart';
-//import 'package:peliculas/models/productos_model.dart';
-//import 'package:peliculas/providers/productos_providers.dart';
-
 import '../models/productos_model.dart';
 
 class ProductoDetalle extends StatelessWidget {
@@ -19,10 +15,35 @@ class ProductoDetalle extends StatelessWidget {
         : (pmoneydif == 2)
             ? "Eur."
             : "Bs.";
-    var precio1 ='Precio 1 $moneda${producto.pventa1.toStringAsFixed(2)}';
-    var precio2 ='Precio 2 $moneda${producto.pventa2.toStringAsFixed(2)}';
-    var precio3 ='Precio 3 $moneda${producto.pventa3.toStringAsFixed(2)}';
-    var precio4 ='Precio 4 $moneda${producto.pventa4.toStringAsFixed(2)}';
+    var precio1bs = (pmoneydif == 0)
+        ? " "
+        : "  Bs:" + (producto.pventa1 * producto.ptasac).toStringAsFixed(2);
+    var precio2bs = (pmoneydif == 0)
+        ? " "
+        : "  Bs:" + (producto.pventa2 * producto.ptasac).toStringAsFixed(2);
+    var precio3bs = (pmoneydif == 0)
+        ? " "
+        : "  Bs:" + (producto.pventa3 * producto.ptasac).toStringAsFixed(2);
+    var precio4bs = (pmoneydif == 0)
+        ? " "
+        : "  Bs:" + (producto.pventa4 * producto.ptasac).toStringAsFixed(2);
+    var precio5bs = (pmoneydif == 0)
+        ? " "
+        : "  Bs:" + (producto.pventa5 * producto.ptasac).toStringAsFixed(2);
+    var precio1 =
+        'Precio1: $moneda${producto.pventa1.toStringAsFixed(2)} $precio1bs ';
+    var precio2 = (producto.pventa2 == 0)
+        ? ""
+        : 'Precio2: $moneda${producto.pventa2.toStringAsFixed(2)} $precio2bs ';
+    var precio3 = (producto.pventa3 == 0)
+        ? ""
+        : 'Precio3: $moneda${producto.pventa3.toStringAsFixed(2)} $precio3bs ';
+    var precio4 = (producto.pventa4 == 0)
+        ? ""
+        : 'Precio4: $moneda${producto.pventa4.toStringAsFixed(2)} $precio4bs ';
+    var precio5 = (producto.pventa5 == 0)
+        ? ""
+        : 'Precio5: $moneda${producto.pventa5.toStringAsFixed(2)} $precio5bs ';
 
     return Scaffold(
         body: CustomScrollView(
@@ -35,13 +56,34 @@ class ProductoDetalle extends StatelessWidget {
               _campoFormulario(producto, 'Nombre: ${producto.pdescribe}'), //1
               //SizedBox(height: 1.0),
               _campoFormulario(producto, precio1), //1
-              _campoFormulario(producto, precio2), //1
-              _campoFormulario(producto, precio3), //1
-              _campoFormulario(producto, precio4), //1
-              _campoFormulario(producto, producto.pdepartamento), //1
-              _campoFormulario(producto, producto.pempaque), //1
-              _campoFormulario(producto, producto.pintercode), //1
+              (producto.pventa2 == 0)
+                  ? SizedBox(height: 0.0)
+                  : _campoFormulario(producto, precio2), //1
+
+              (producto.pventa3 == 0)
+                  ? SizedBox(height: 0.0)
+                  : _campoFormulario(producto, precio3), //1
+              (producto.pventa4 == 0)
+                  ? SizedBox(height: 0.0)
+                  : _campoFormulario(producto, precio4), //1
+              (producto.pventa5 == 0)
+                  ? SizedBox(height: 0.0)
+                  : _campoFormulario(producto, precio5), //1
+              _campoFormulario(
+                  producto, 'Tasa de Cambio: ${producto.ptasac}'), //1
+              _campoFormulario(
+                  producto, 'Saldo cantidade(s): ${producto.pexiste}'),
+              _campoFormulario(producto, 'Medida: ${producto.pmedida}'), //1
+              _campoFormulario(producto,
+                  'Empaque: ${producto.pempaque} Med del Empaque:${producto.pmedempaque}'), //1
+              //_campoFormulario(producto, 'Medida de Empaque: ${producto.pmedempaque}'), //1
               _posterTitulo(context, producto),
+              _campoFormulario(producto, producto.pdepartamento), //1
+              _campoFormulario(producto, producto.preferencia), //1
+              _campoFormulario(producto, producto.pintercode), //1
+              _campoFormulario(producto, producto.pdepartamento), //1
+
+              // _posterTitulo(context, producto),
               SizedBox(height: 1.0),
               //   _crearCasting(producto),
             ],
@@ -79,33 +121,6 @@ class ProductoDetalle extends StatelessWidget {
       ),
     );
   }
-
-/*
-
-  Widget _crearAppbar(Pelicula pelicula) {
-    return SliverAppBar(
-      elevation: 2.0,
-      backgroundColor: Colors.orange,
-      expandedHeight: 200.0,
-      floating: false,
-      pinned: true,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        title: Text(
-          pelicula.title,
-          style: TextStyle(color: Colors.white, fontSize: 16.0),
-        ),
-        background: FadeInImage(
-          image: NetworkImage(pelicula.getFondoImagen()),
-          placeholder: AssetImage('assets/img/loading.gif'),
-       // placeholder: AssetImage('assets/img/loading.gif'),
-          fadeInDuration: Duration(microseconds: 150),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-  */
 
   Widget _posterTitulo(BuildContext context, Producto producto) {
     return Container(

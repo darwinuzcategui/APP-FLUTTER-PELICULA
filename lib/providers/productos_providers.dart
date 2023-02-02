@@ -10,7 +10,7 @@ import '../models/productos_model.dart';
 class ProductosProvider {
   //String _apikey = '65decc06132b29f2ddb36bfbdb83276b';
   //String _url = 'api.themoviedb.org';
-  String _url = '192.168.1.4:8080';
+  String _url = '192.168.1.5:8080';
   //String _lenguaje = 'es-ES';
   int _paginaEnProductos = 0;
 
@@ -75,7 +75,7 @@ class ProductosProvider {
 // Vamos a los llamados de enpoind
 
   Future<List<Producto>> getProductosDeD3xd() {
-    final url = Uri.http('192.168.1.4:8080', '/d3xd/productos');
+    final url = Uri.http(_url, '/d3xd/productos');
 
     print(url);
 
@@ -105,7 +105,7 @@ class ProductosProvider {
     final _url = "example.com/api/";
 final _uri = Uri.https(path: _url, queryParameters: _params);
     */
-    //var uri = Uri.http('192.168.1.4:8080', '/productos', {'q': 'dart'});
+    //var uri = Uri.http(_url, '/productos', {'q': 'dart'});
     var uri = Uri.http(_url, '/productos');
     print(uri); // http://example.org/path?q=dart
 
@@ -138,34 +138,9 @@ final _uri = Uri.https(path: _url, queryParameters: _params);
 
     _cargando = false;
 
-    //print("**************respuesta***************");
-    //print(respuesta);
-    //print("**************respuesta***************");
-
     return respuesta;
   }
 
-  /*
-
-  Future<List<Actor>> getCastActoresDeProducto(String peliId) async {
-    // este es url https://api.themoviedb.org/3/movie/419704/credits?api_key=65decc06132b29f2ddb36bfbdb83276b
-
-    final url = Uri.https(_url, '3/movie/$peliId/credits', {
-      'api_key': _apikey,
-      'language': _lenguaje,
-    });
-
-    final respuesta = await http.get(url);
-    print(respuesta);
-    final decodificadorDataDelMapa = json.decode(respuesta.body);
-
-    // crear una nueva insancia del modelo cast
-    final cast = new Cast.fromJsonList(decodificadorDataDelMapa['cast']);
-
-    return cast.actores;
-  }
-
-*/
   Future<List<Producto>> buscarD3xdProductos(String terminoABuscar) async {
     // search/movie
     final url = Uri.http(_url, '/d3xd/buscar', {
@@ -176,6 +151,24 @@ final _uri = Uri.https(path: _url, queryParameters: _params);
 
     final ver = await _procesarRespuesta(url);
     print(ver);
+
+    return ver;
+  }
+
+  Future<List<Producto>> GetProducto(String codigoBarra) async {
+    // search/movie
+    print("**************" + codigoBarra);
+    final url = Uri.http(_url, '/d3xd/buscar', {
+      //'api_key': _apikey,
+      //'language': _lenguaje,
+      'buscar': codigoBarra,
+    });
+
+    final ver = await _procesarRespuesta(url);
+    print("*******GetProducto***********************" + codigoBarra);
+    print(ver);
+    print(ver.length);
+    print("***************************************");
 
     return ver;
   }
