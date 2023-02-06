@@ -3,10 +3,15 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:productos/models/productos_model.dart';
 //import '../models/productos_model.dart';
-//import '../providers/productos_providers.dart';
+import '../providers/productos_providers.dart';
+import '../widget_personalizados/productos_vertical.dart';
+import '../widget_personalizados/card_swiper_widget.dart';
 
 class ScanearCodigo extends StatefulWidget {
+//class ScanearCodigo extends StatelessWidget {
+//class ScanearCodigo extends StatelessWidget {
   const ScanearCodigo({Key key}) : super(key: key);
   @override
   _AppState createState() => _AppState();
@@ -14,15 +19,19 @@ class ScanearCodigo extends StatefulWidget {
 
 class _AppState extends State<ScanearCodigo> {
   ScanResult scanResult;
-  epale() {
-    print("aqui");
-    throw UnimplementedError();
-  }
+  String resulta2;
+  final llame = "CODIGODEBRRA";
+
+  Producto producto;
+
+  //get result2 => null;
+  //String codigo;
 
   final _flashOnController = TextEditingController(text: 'Flash on');
   final _flashOffController = TextEditingController(text: 'Flash off');
   final _cancelController = TextEditingController(text: 'Cancel');
-
+  final productosProvider = new ProductosProvider();
+  final productos = new Productos();
   var _aspectTolerance = 0.00;
   // ignore: unused_field
   var _numberOfCameras = 0;
@@ -50,15 +59,31 @@ class _AppState extends State<ScanearCodigo> {
   @override
   Widget build(BuildContext context) {
     final scanResult = this.scanResult;
+    //final codigo = this.codigo;
+    if (scanResult != null) {
+      //final productosProvider = new ProductosProvider();
+      productosProvider.GetProducto(scanResult.rawContent);
+      //print("***1111111111111*******************");
+
+      //print((producto.pcode != null) ? producto.pcode : "codigo texto");
+    }
     return MaterialApp(
         //backgroundColor: Colors.orangeAccent,
-
+        theme: ThemeData(
+            colorSchemeSeed: Color.fromARGB(255, 194, 131, 23),
+            useMaterial3: true),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.orangeAccent,
-              title: const Text('Barcode Scanner Ejemplo'),
+              title: const Text('Productos Scaneados Barcode '),
               actions: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  //icon: const Icon(Icons.barcode_reader),
+                  tooltip: 'Regresar inicio',
+                  onPressed: () { Navigator.pop(context); },
+                ),
                 IconButton(
                   icon: const Icon(Icons.barcode_reader),
                   tooltip: 'Scan',
@@ -69,184 +94,19 @@ class _AppState extends State<ScanearCodigo> {
             body: Card(
                 child: Column(children: <Widget>[
               //Tex( const Text('Result Type'),
-              //if (scanResult != null)
-              Text((scanResult != null) ? scanResult.type.toString() : "tipo"),
+             // if (scanResult != null)
+             //   Text(
+               //     (scanResult != null) ? scanResult.type.toString() : "tipo"),
               Text((scanResult != null)
                   ? scanResult.rawContent.toString()
                   : "Resultado"),
-            ])
-/*
-        body: ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: <Widget>[
-            if (scanResult != null)
-              Card(
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      title: const Text('Result Type'),
-                      subtitle: Text(scanResult.type.toString()),
-                    ),
-                    ListTile(
-                      title: const Text('Raw Content'),
-                      subtitle: Text(scanResult.rawContent),
-                    ),
-                    ListTile(
-                      title: const Text('Format'),
-                      subtitle: Text(scanResult.format.toString()),
-                    ),
-                    ListTile(
-                      title: const Text('Format note'),
-                      subtitle: Text(scanResult.formatNote),
-                    ),
-                  ],
-                ),
-              ),
-            const ListTile(
-              title: Text('Camera selection'),
-              dense: true,
-              enabled: false,
-            ),
-            RadioListTile(
-              onChanged: (v) => setState(() => _selectedCamera = -1),
-              value: -1,
-              title: const Text('Default camera'),
-              groupValue: _selectedCamera,
-            ),
-            ...List.generate(
-              _numberOfCameras,
-              (i) => RadioListTile(
-                onChanged: (v) => setState(() => _selectedCamera = i),
-                value: i,
-                title: Text('Camera ${i + 1}'),
-                groupValue: _selectedCamera,
-              ),
-            ),
-            const ListTile(
-              title: Text('Button Texts'),
-              dense: true,
-              enabled: false,
-            ),
-            ListTile(
-              title: TextField(
-                decoration: const InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  labelText: 'Flash On',
-                ),
-                controller: _flashOnController,
-              ),
-            ),
-            ListTile(
-              title: TextField(
-                decoration: const InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  labelText: 'Flash Off',
-                ),
-                controller: _flashOffController,
-              ),
-            ),
-            ListTile(
-              title: TextField(
-                decoration: const InputDecoration(
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  labelText: 'Cancel',
-                ),
-                controller: _cancelController,
-              ),
-            ),
-            if (Platform.isAndroid) ...[
-              const ListTile(
-                title: Text('Android specific options'),
-                dense: true,
-                enabled: false,
-              ),
-              ListTile(
-                title: Text(
-                  'Aspect tolerance (${_aspectTolerance.toStringAsFixed(2)})',
-                ),
-                subtitle: Slider(
-                  min: -1,
-                  max: 1,
-                  value: _aspectTolerance,
-                  onChanged: (value) {
-                    setState(() {
-                      _aspectTolerance = value;
-                    });
-                  },
-                ),
-              ),
-              CheckboxListTile(
-                title: const Text('Use autofocus'),
-                value: _useAutoFocus,
-                onChanged: (checked) {
-                  setState(() {
-                    // ignore: unused_local_variable
-                    var bool = _useAutoFocus = checked;
-                  });
-                },
-              ),
-            ],
-            const ListTile(
-              title: Text('Other options'),
-              dense: true,
-              enabled: false,
-            ),
-            CheckboxListTile(
-              title: const Text('Start with flash'),
-              value: _autoEnableFlash,
-              onChanged: (checked) {
-                setState(() {
-                  // ignore: unused_local_variable
-                  var bool = _autoEnableFlash = checked;
-                });
-              },
-            ),
-            const ListTile(
-              title: Text('Barcode formats'),
-              dense: true,
-              enabled: false,
-            ),
-            ListTile(
-              trailing: Checkbox(
-                tristate: true,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                value: selectedFormats.length == _possibleFormats.length
-                    ? true
-                    : selectedFormats.isEmpty
-                        ? false
-                        : null,
-                onChanged: (checked) {
-                  setState(() {
-                    selectedFormats = [
-                      if (checked ?? false) ..._possibleFormats,
-                    ];
-                  });
-                },
-              ),
-              dense: true,
-              enabled: false,
-              title: const Text('Detect barcode formats'),
-              subtitle: const Text(
-                'If all are unselected, all possible '
-                'platform formats will be used',
-              ),
-            ),
-            ..._possibleFormats.map(
-              (format) => CheckboxListTile(
-                value: selectedFormats.contains(format),
-                onChanged: (i) {
-                  setState(() => selectedFormats.contains(format)
-                      ? selectedFormats.remove(format)
-                      : selectedFormats.add(format));
-                },
-                title: Text(format.toString()),
-              ),
-            ),
-          ],
-        ),
-      */
-                )));
+              (scanResult != null)
+                  ? _swiperTarjeta(scanResult.rawContent.toString())
+                  : Text(""),
+              //_swiperTarjeta(scanResult.rawContent.toString()),
+              if (scanResult != null) _productoResultado(context),
+              if (scanResult != null) _botonesFlotante2(context),
+            ]))));
   }
 
   Future<void> _scan() async {
@@ -279,5 +139,102 @@ class _AppState extends State<ScanearCodigo> {
         );
       });
     }
+  }
+
+// aqui
+  Widget _productoResultado(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 10.0),
+            child: Text("Lista Producto Escaneado.",
+                //Theme.of(context).textTheme.subtitle1
+                //  style: Theme.of(context).textTheme.subhead),
+                style: Theme.of(context).textTheme.titleMedium),
+          ),
+          SizedBox(height: 2.00),
+          StreamBuilder(
+            // esto es observarble que se ejecuta cada vez que cambie el stream
+            stream: productosProvider.gmdAppListaProductostream,
+            //builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              //snapshot.data?.forEach((prod)=> print(prod.pdescribe));
+
+              //snapshot.data?.forEach((prod) => prod = prod.pdescribe);
+
+              if (snapshot.hasData) {
+                return ProductosVertical(
+                  productos: snapshot.data,
+                  //codigo: productos.items,
+
+                  //  siguientePagina: productosProvider.getProductos(),
+                );
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _swiperTarjeta(String codigoBarra) {
+    //productosProvider.GetProducto(scanResult.rawContent);
+    final productosProvider = new ProductosProvider();
+    //var scanResult;
+    return FutureBuilder(
+      future: productosProvider.GetProducto(codigoBarra),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        //if (snapshot.data.length == 1) {
+        if (snapshot.hasData) {
+          print(snapshot.data.length);
+          return (snapshot.data.length == 1)
+              ? CardSwiper(
+                  productos: snapshot.data,
+                  quienMellamo: llame,
+                )
+              : Container(
+                  height: 300.0,
+                  child: Center(child: CircularProgressIndicator()));
+        } else {
+          return Container(
+              height: 300.0, child: Center(child: CircularProgressIndicator()));
+        }
+      },
+    );
+  }
+
+  //Row _botonesFlotantes() {
+  Widget _botonesFlotante2(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //const Text('Extended'),
+              //const SizedBox(height: 16),
+              // An example of the extended floating action button.
+              //
+              // https://m3.material.io/components/extended-fab/specs#686cb8af-87c9-48e8-a3e1-db9da6f6c69b
+              FloatingActionButton.extended(
+                onPressed: () {
+                  // Add your onPressed code here!
+                  _scan();
+                },
+                label: const Text('Scaner'),
+                icon: const Icon(Icons.barcode_reader),
+              ),
+              //SizedBox( height: 28,),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

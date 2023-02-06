@@ -75,14 +75,15 @@ class ProductosHorizontal extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
               child: FadeInImage(
                 placeholder: AssetImage('assets/img/no-image.jpg'),
-                image: NetworkImage(producto.getImagen()),
+                image: AssetImage('assets/img/barra1.png'),
+                //image: NetworkImage(producto.getImagen()),
                 fit: BoxFit.cover,
                 height: 90.0,
                 width: 210.0,
               ),
             ),
           ),
-          SizedBox(height: 3.0),
+          SizedBox(height: 1.0),
           Text(
             producto.pdescribe,
             overflow: TextOverflow.clip,
@@ -94,7 +95,7 @@ class ProductosHorizontal extends StatelessWidget {
     return GestureDetector(
       child: productoTarjeta,
       onTap: () {
-        print('Pulsaste click aqui! el de la pelicula es Id ${producto.pcode}');
+        print('Pulsaste click aqui! el de la producto es Id ${producto.pcode}');
         Navigator.pushNamed(context, 'detalle', arguments: producto);
       },
     );

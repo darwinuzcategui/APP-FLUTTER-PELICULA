@@ -10,30 +10,30 @@ import '../models/productos_model.dart';
 class ProductosProvider {
   //String _apikey = '65decc06132b29f2ddb36bfbdb83276b';
   //String _url = 'api.themoviedb.org';
-  String _url = '192.168.1.5:8080';
+  String _url = '192.168.1.3:3550';
   //String _lenguaje = 'es-ES';
   int _paginaEnProductos = 0;
 
   bool _cargando = false;
 
   // vamos hacer las definicion
-  List<Producto> _popularesListaProductos = [];
+  List<Producto> _gmdAppListaProductos = [];
   // este es codigo para crear un Stream el broasdcast para que varias personas escuches o varios subscriptores
   // este la tuberia solamente
-  final _popularesListaProductostreamController =
+  final _gmdAppListaProductostreamController =
       StreamController<List<Producto>>.broadcast();
 
   // con esto introducidos la Productos o cualquire cosa esta la sixtaxis
-  Function(List<Producto>) get popularesListaProductosSink =>
-      _popularesListaProductostreamController.sink.add;
+  Function(List<Producto>) get gmdAppListaProductosSink =>
+      _gmdAppListaProductostreamController.sink.add;
   //_popi
 
   //para escuchar las Productos es con Stream y se le puede decir es tipo de informacion que esta emitiendo<List<Pelota>>
-  Stream<List<Producto>> get popularesListaProductostream =>
-      _popularesListaProductostreamController.stream;
+  Stream<List<Producto>> get gmdAppListaProductostream =>
+      _gmdAppListaProductostreamController.stream;
 
   void disposeStreams() {
-    _popularesListaProductostreamController?.close();
+    _gmdAppListaProductostreamController?.close();
   }
 
   // vamos hacer un metodo de esta clases privados para optimizar el codigo
@@ -92,14 +92,14 @@ class ProductosProvider {
     }
 
     _paginaEnProductos++;
-    // print('getPopulares $_paginaEnPopulares');
+    // print('getgmdApp $_paginaEngmdApp');
     //final url = Uri.https(_url, '3/movie/popular', {
     //final url1 = Uri.http(_url);
 
     //final url = Uri.http(_url, '', {
     //  'api_key': _apikey,
     //  'language': _lenguaje,
-    //  'page': _paginaEnPopulares.toString(),
+    //  'page': _paginaEngmdApp.toString(),
     // });
     /*
     final _url = "example.com/api/";
@@ -131,10 +131,10 @@ final _uri = Uri.https(path: _url, queryParameters: _params);
 
     final respuesta = await _procesarRespuesta(url);
 
-    _popularesListaProductos.addAll(respuesta);
+    _gmdAppListaProductos.addAll(respuesta);
 
     // aqui utilizamos nuestros stream
-    popularesListaProductosSink(_popularesListaProductos);
+    gmdAppListaProductosSink(_gmdAppListaProductos);
 
     _cargando = false;
 
@@ -157,19 +157,30 @@ final _uri = Uri.https(path: _url, queryParameters: _params);
 
   Future<List<Producto>> GetProducto(String codigoBarra) async {
     // search/movie
-    print("**************" + codigoBarra);
-    final url = Uri.http(_url, '/d3xd/buscar', {
+    //print("**************" + codigoBarra);
+    final url = Uri.http(_url, '/d3xd/barcode', {
       //'api_key': _apikey,
       //'language': _lenguaje,
       'buscar': codigoBarra,
     });
 
-    final ver = await _procesarRespuesta(url);
-    print("*******GetProducto***********************" + codigoBarra);
-    print(ver);
-    print(ver.length);
-    print("***************************************");
+    //final ver = await _procesarRespuesta(url);
+    //print("*******GetProducto***********************" + codigoBarra);
+    // print(ver);
+    // print(ver.length);
+    //print("***************************************");
 
-    return ver;
+    final respuesta = await _procesarRespuesta(url);
+
+    _gmdAppListaProductos.addAll(respuesta);
+
+    // aqui utilizamos nuestros stream
+    gmdAppListaProductosSink(_gmdAppListaProductos);
+
+    _cargando = false;
+
+    return respuesta;
+
+    //return ver;
   }
 }

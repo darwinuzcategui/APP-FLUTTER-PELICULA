@@ -1,3 +1,4 @@
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../buscar/buscar_delegate.dart';
 import '../scan/scanearCodigo.dart';
@@ -8,46 +9,53 @@ import '../widget_personalizados/productos_horizontal.dart';
 class InicioPagina extends StatelessWidget {
   // const InicoPagina({Key key}) : super(key: key);
   final productosProvider = new ProductosProvider();
+  final llame = "INICIOPAGINA";
 
   @override
   Widget build(BuildContext context) {
     // aqui cuando se ejecuta
     productosProvider.getProductos();
+    //final  FloatingActionButton floatingActionButton:
+    // _botonesFlotantes();
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          title: Text('App-GMD Productos'),
-          backgroundColor: Colors.orangeAccent,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(
-                    context: context, delegate: BuscarDatos(), query: '');
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.barcode_reader),
-              tooltip: 'Scan',
-              // //_scan
-              onPressed: () {
-                //Navigator.pushNamed(context, 'scan', arguments: producto);
-                Navigator.pushNamed(context, 'scan', arguments: ScanearCodigo());
-                //ScanearCodigo();
-              },
-            ),
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text('App-GMD Productos'),
+        backgroundColor: Colors.orangeAccent,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: BuscarDatos(), query: '');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.barcode_reader),
+            tooltip: 'Scan',
+            // //_scan
+            onPressed: () {
+              //Navigator.pushNamed(context, 'scan', arguments: producto);
+              Navigator.pushNamed(context, 'scan', arguments: ScanearCodigo());
+              //ScanearCodigo();
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            // _botonesFlotante2(context),
+            _swiperTarjeta(),
+            // _botonesFlotante2(context),
+            _footerOpiePag(context),
+            // _botonesFlotante(context),
+            _botonesFlotante2(context),
+            //_botonesFlotante(context),
           ],
         ),
-        body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _swiperTarjeta(),
-              //Text("hola"),
-              _footerOpiePag(context),
-            ],
-          ),
-        ));
+      ),
+    );
   }
 
   // van los nuevos metodos de la clases
@@ -58,7 +66,7 @@ class InicioPagina extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
           //print(snapshot.data);
-          return CardSwiper(productos: snapshot.data);
+          return CardSwiper(productos: snapshot.data, quienMellamo: llame);
         } else {
           return Container(
               height: 300.0, child: Center(child: CircularProgressIndicator()));
@@ -74,16 +82,16 @@ class InicioPagina extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(left: 20.0),
+            padding: EdgeInsets.only(left: 10.0),
             child: Text("Productos Ordenado x Existencia..",
                 //Theme.of(context).textTheme.subtitle1
                 //  style: Theme.of(context).textTheme.subhead),
                 style: Theme.of(context).textTheme.titleMedium),
           ),
-          SizedBox(height: 5.0),
+          SizedBox(height: 0.5),
           StreamBuilder(
             // esto es observarble que se ejecuta cada vez que cambie el stream
-            stream: productosProvider.popularesListaProductostream,
+            stream: productosProvider.gmdAppListaProductostream,
             builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
               // snapshot.data?.forEach((peli)=> print(peli.title));
               if (snapshot.hasData) {
@@ -96,6 +104,55 @@ class InicioPagina extends StatelessWidget {
                 return Center(child: CircularProgressIndicator());
               }
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  //Row _botonesFlotantes() {
+  Widget _botonesFlotante2(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          /*
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text('Scaner'),
+              const SizedBox(width: 16),
+              // An example of the small floating action button.
+              //
+              // https://m3.material.io/components/floating-action-button/specs#669a1be8-7271-48cb-a74d-dd502d73bda4
+              FloatingActionButton.small(
+                onPressed: () {
+                  // Add your onPressed code here!
+                },
+                child: const Icon(Icons.barcode_reader),
+              ),
+            ],
+          ),
+          */
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              //const Text('Extended'),
+              //const SizedBox(height: 16),
+              // An example of the extended floating action button.
+              //
+              // https://m3.material.io/components/extended-fab/specs#686cb8af-87c9-48e8-a3e1-db9da6f6c69b
+              FloatingActionButton.extended(
+                onPressed: () {
+                  // Add your onPressed code here!
+                  Navigator.pushNamed(context, 'scan',
+                      arguments: ScanearCodigo());
+                },
+                label: const Text('Scaner'),
+                icon: const Icon(Icons.barcode_reader),
+              ),
+              //SizedBox( height: 28,),
+            ],
           ),
         ],
       ),
