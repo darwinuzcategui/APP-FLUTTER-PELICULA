@@ -6,11 +6,14 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 import '../models/productos_model.dart';
+import '../preferencia/preferencia_usuarios.dart';
 
 class ProductosProvider {
-  //String _apikey = '65decc06132b29f2ddb36bfbdb83276b';
+  final prefs = new PreferenciaUsuarios();
+
+  String get _url => prefs.urlbase; // '192.168.1.3:8080';
   //String _url = 'api.themoviedb.org';
-  String _url = '192.168.1.3:3550';
+  //String _url = _url1; //'192.168.1.3:3550';
   //String _lenguaje = 'es-ES';
   int _paginaEnProductos = 0;
 

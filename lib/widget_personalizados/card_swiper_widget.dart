@@ -3,6 +3,7 @@
 //import 'package:barcode_scan2/gen/protos/protos.pbjson.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:productos/pag/producto_detalle.dart';
 
 import '../models/productos_model.dart';
 //import '../productos../models/productos_model.dart';
@@ -121,7 +122,7 @@ class CardSwiper extends StatelessWidget {
               //onTap: () =>  _dialogBuilder(context, productos[index]),
               onTap: () => (quienMellamo == "CODIGODEBRRA")
                   ? _dialogBuilder(context, productos[index])
-                  : Navigator.pushNamed(context, 'detalle',
+                  : Navigator.pushNamed(context, ProductoDetalle.routerName,
                       arguments: productos[index]),
 
               child: Stack(children: <Widget>[

@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:productos/models/productos_model.dart';
 //import '../models/productos_model.dart';
+import '../pag/inicio_pagina.dart';
+import '../preferencia/preferencia_usuarios.dart';
 import '../providers/productos_providers.dart';
+//import '../widget_personalizados/menu_lateral_widget.dart';
 import '../widget_personalizados/productos_vertical.dart';
 import '../widget_personalizados/card_swiper_widget.dart';
 
@@ -15,11 +18,14 @@ class ScanearCodigo extends StatefulWidget {
   const ScanearCodigo({Key key}) : super(key: key);
   @override
   _AppState createState() => _AppState();
+
+  static final String routerName = 'scan';
 }
 
 class _AppState extends State<ScanearCodigo> {
   ScanResult scanResult;
   String resulta2;
+
   final llame = "CODIGODEBRRA";
 
   Producto producto;
@@ -32,6 +38,7 @@ class _AppState extends State<ScanearCodigo> {
   final _cancelController = TextEditingController(text: 'Cancel');
   final productosProvider = new ProductosProvider();
   final productos = new Productos();
+  final prefs = new PreferenciaUsuarios();
   var _aspectTolerance = 0.00;
   // ignore: unused_field
   var _numberOfCameras = 0;
@@ -47,6 +54,7 @@ class _AppState extends State<ScanearCodigo> {
   @override
   void initState() {
     super.initState();
+    prefs.ultimaPagVisitada = ScanearCodigo.routerName;
 
     Future.delayed(Duration.zero, () async {
       _numberOfCameras = 0; //await BarcodeScanner.numberOfCameras;
@@ -82,7 +90,12 @@ class _AppState extends State<ScanearCodigo> {
                   icon: const Icon(Icons.arrow_back_rounded),
                   //icon: const Icon(Icons.barcode_reader),
                   tooltip: 'Regresar inicio',
-                  onPressed: () { Navigator.pop(context); },
+                  onPressed: () {
+                    (InicioPagina.routerName != null)
+                        ? Navigator.pushReplacementNamed(
+                            context, InicioPagina.routerName)
+                        : Navigator.pop(context);
+                  },
                 ),
                 IconButton(
                   icon: const Icon(Icons.barcode_reader),
@@ -94,9 +107,9 @@ class _AppState extends State<ScanearCodigo> {
             body: Card(
                 child: Column(children: <Widget>[
               //Tex( const Text('Result Type'),
-             // if (scanResult != null)
-             //   Text(
-               //     (scanResult != null) ? scanResult.type.toString() : "tipo"),
+              // if (scanResult != null)
+              //   Text(
+              //     (scanResult != null) ? scanResult.type.toString() : "tipo"),
               Text((scanResult != null)
                   ? scanResult.rawContent.toString()
                   : "Resultado"),
@@ -134,8 +147,8 @@ class _AppState extends State<ScanearCodigo> {
           type: ResultType.Error,
           format: BarcodeFormat.unknown,
           rawContent: e.code == BarcodeScanner.cameraAccessDenied
-              ? 'The user did not grant the camera permission!'
-              : 'Unknown error: $e',
+              ? '¡El usuario no le dio permiso a la cámara!'
+              : 'Error desconocido: $e',
         );
       });
     }

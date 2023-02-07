@@ -1,26 +1,34 @@
 //import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+//import 'package:productos/widget_personalizados/menu_latera.dart';
 import '../buscar/buscar_delegate.dart';
+import '../preferencia/preferencia_usuarios.dart';
+//import '../providers/provider.dart';
 import '../scan/scanearCodigo.dart';
 import '../providers/productos_providers.dart';
 import '../widget_personalizados/card_swiper_widget.dart';
+import '../widget_personalizados/menu_lateral_widget.dart';
 import '../widget_personalizados/productos_horizontal.dart';
 
 class InicioPagina extends StatelessWidget {
   // const InicoPagina({Key key}) : super(key: key);
   final productosProvider = new ProductosProvider();
+  final prefs = new PreferenciaUsuarios();
+  static final String routerName = 'inicio';
   final llame = "INICIOPAGINA";
 
   @override
   Widget build(BuildContext context) {
     // aqui cuando se ejecuta
+    prefs.ultimaPagVisitada = InicioPagina.routerName;
+    //final bloc = Provider.of(context);
     productosProvider.getProductos();
     //final  FloatingActionButton floatingActionButton:
     // _botonesFlotantes();
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text('App-GMD Productos'),
+        title: Text('GMD-App'),
         backgroundColor: Colors.orangeAccent,
         actions: <Widget>[
           IconButton(
@@ -41,10 +49,13 @@ class InicioPagina extends StatelessWidget {
           ),
         ],
       ),
+      drawer: MenuWidgetDrawer(),
+      //drawer: MenuLateral(),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
+            //Text('UserQweb : ${bloc.httpQwb}'),
             // _botonesFlotante2(context),
             _swiperTarjeta(),
             // _botonesFlotante2(context),

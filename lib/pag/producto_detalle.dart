@@ -3,12 +3,14 @@ import '../models/productos_model.dart';
 
 class ProductoDetalle extends StatelessWidget {
   // esta en una forma final Pelicula pelicula;
+  static final String routerName = 'detalle';
 
   // contructor PeliculaDetalle(this.pelicula);
 
   @override
   Widget build(BuildContext context) {
     final Producto producto = ModalRoute.of(context).settings.arguments;
+    
     var pmoneydif = producto.pmoneydif;
     var moneda = (pmoneydif == 1)
         ? "\$."
