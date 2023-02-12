@@ -138,19 +138,51 @@ class ProductosProvider {
       String codigoProducto, String codigoBarra) async {
     //{"id": "0001234","codBarra": "aI216072806399"}
     final codigoDeBarra = {'id': codigoProducto, 'codBarra': codigoBarra};
+    print("*************************************");
+    print(_url);
+    print(codigoDeBarra);
+    print("*************************************");
 
     final url = Uri.http(
       _url,
       '/d3xd/barcode',
     );
     //final resp = await http.post(url, body: json.encode(codigoDeBarra));
-    final resp = await http.post(url,
+    var resp = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(codigoDeBarra));
 
     if (resp.statusCode == 200) {
       return "Se Guardo el código de Barra Satisfactoriamente!. ";
     }
+    if (resp.statusCode == 301) {
+      /*
+      var url = Uri.https('example.com', 'whatsit/create');
+var response = await http.post(url, body: {'name': 'doodle', 'color': 'blue'});
+print('Response status: ${response.statusCode}');
+print('Response body: ${response.body}');
+
+print(await http.read(Uri.https('example.com', 'foobar.txt')));
+      */
+
+      final url = Uri.https(
+        _url,
+        '/d3xd/barcode',
+      );
+
+      resp = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(codigoDeBarra));
+
+      // return "Se Guardo el código de Barra Satisfactoriamente!. ";
+    }
+
+    //final resp = await http.post(url, headers: {"Content-Type": "application/json"},body: jsonEncode(codigoDeBarra));
+    print("*************************************");
+    print(resp.statusCode);
+    print(resp.body);
+    print(url);
+    print("*************************************");
 
     //print(resp.body.length);
 
