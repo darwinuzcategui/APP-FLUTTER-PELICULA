@@ -71,7 +71,43 @@ class _ConfiguracionPaginaState extends State<ConfiguracionPagina> {
               onPressed: () =>
                   Navigator.pushReplacementNamed(context, 'inicio'),
               child: Text('Ya tienes una Conexion registrada ?')),
-          SizedBox(height: 100.0)
+          SizedBox(height: 25.0),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: Stack(
+              children: <Widget>[
+                Positioned.fill(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: <Color>[
+                          Color.fromARGB(255, 242, 97, 61),
+                          Color.fromARGB(255, 239, 168, 87),
+                          Colors.orange,
+                          Color.fromARGB(179, 225, 207, 10),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Color.fromARGB(255, 13, 12, 12),
+                      padding: const EdgeInsets.all(16.0),
+                      textStyle: const TextStyle(fontSize: 15),
+                    ),
+                    onPressed: () => {
+                          prefs.urlbase = 'backen-producto-production.up.railway.app',
+                          Navigator.pushReplacementNamed(context, 'inicio'),
+                        },
+                    //prefs.urlbase = "",
+                    //print(prefs.urlbase);
+
+                    child: Text('En modo DEMO---> Backend en la nube ?')),
+                SizedBox(height: 50.0)
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -148,7 +184,11 @@ class _ConfiguracionPaginaState extends State<ConfiguracionPagina> {
     print('http: ${bloc.httpQwb} ');
     print('Puerto: ${bloc.puertoQwb} ');
     print('===========================');
-    prefs.urlbase = '${bloc.httpQwb}:${bloc.puertoQwb}';
+    String _http = bloc.httpQwb.toString();
+    String _puerto = bloc.puertoQwb.toString();
+    //prefs.ultimaPagVisitada = AcercaPagina.routerName;
+    //prefs.urlbase = '${bloc.httpQwb}:${bloc.puertoQwb}';
+    prefs.urlbase = _http + ":" + _puerto;
     print(prefs.urlbase);
 
     //final info = await .nuevoUsuario(bloc.email, bloc.clave);

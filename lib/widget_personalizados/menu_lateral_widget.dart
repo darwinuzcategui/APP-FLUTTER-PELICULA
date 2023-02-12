@@ -7,6 +7,7 @@ import 'package:productos/scan/scanearCodigo.dart';
 
 import '../pag/acerca_pagina.dart';
 import '../pag/configuracion_pagina.dart';
+//import '../pag/prueba.dart';
 //import 'package:productos/pag/producto_detalle.dart';
 //import 'package:productos/pag/inicio_pagina.dart';
 //import 'package:prefrenciausuarioapp/src/pag/inicio_pag.dart';
@@ -57,14 +58,22 @@ class MenuWidgetDrawer extends StatelessWidget {
             onTap: () => Navigator.pushReplacementNamed(
                 context, AcercaPagina.routerName),
           ),
+          /*ListTile(
+            leading: Icon(Icons.accessibility_rounded, color: rowColor5),
+            title: Text('Prueba'),
+            onTap: () =>
+                Navigator.pushReplacementNamed(context, Prueba.routerName),
+          ),
+          */
           ListTile(
               leading: Icon(Icons.settings, color: Colors.amber),
               title: Text('Ajuste'),
               onTap: () {
-               // ConfiguracionPagina
+                // ConfiguracionPagina
                 // Navigator.pop(context); // para cerrar el menu
                 // Navigator.pushNamed(context, SettingPag.routerName);
-                Navigator.pushReplacementNamed(context, ConfiguracionPagina.routerName);
+                Navigator.pushReplacementNamed(
+                    context, ConfiguracionPagina.routerName);
               }),
           ListTile(
               leading: Icon(Icons.close_fullscreen_sharp, color: rowColor4),

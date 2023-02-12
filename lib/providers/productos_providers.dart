@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:convert';
 import 'dart:async';
 
@@ -11,13 +9,15 @@ import '../preferencia/preferencia_usuarios.dart';
 class ProductosProvider {
   final prefs = new PreferenciaUsuarios();
 
-  String get _url => prefs.urlbase; // '192.168.1.3:8080';
+  String get _url => prefs.urlbase.toString(); // '192.168.1.3:8080';
   //String _url = 'api.themoviedb.org';
   //String _url = _url1; //'192.168.1.3:3550';
   //String _lenguaje = 'es-ES';
+  // ignore: unused_field
   int _paginaEnProductos = 0;
 
   bool _cargando = false;
+  //print(_url);
 
   // vamos hacer las definicion
   List<Producto> _gmdAppListaProductos = [];
@@ -42,18 +42,6 @@ class ProductosProvider {
   // vamos hacer un metodo de esta clases privados para optimizar el codigo
 
   Future<List<Producto>> _procesarRespuesta(Uri url) async {
-    /*
-    var response = await http.get(url);
-  if (response.statusCode == 200) {
-    var jsonResponse =
-        convert.jsonDecode(response.body) as Map<String, dynamic>;
-    var itemCount = jsonResponse['totalItems'];
-    print('Number of books about http: $itemCount.');
-  } else {
-    print('Request failed with status: ${response.statusCode}.');
-  }
-}
-    */
     var productos = new Productos.fromJsonList([]);
 
     final resp = await http.get(url);
@@ -63,9 +51,9 @@ class ProductosProvider {
       // final productos = new Productos.fromJsonList(datosDecodificados);
       productos = new Productos.fromJsonList(datosDecodificados);
 
-      print("------------------------------");
-      print(productos.items.length);
-      print("------------------------------");
+      //print("------------------------------");
+      //print(productos.items.length);
+      //print("------------------------------");
       //return productos.items;
     } else {
       print('FALLO CON EL ESTATUS: ${resp.statusCode}.');
@@ -78,6 +66,7 @@ class ProductosProvider {
 // Vamos a los llamados de enpoind
 
   Future<List<Producto>> getProductosDeD3xd() {
+    print("getProductosDeD3xd() " + _url);
     final url = Uri.http(_url, '/d3xd/productos');
 
     print(url);
@@ -88,47 +77,13 @@ class ProductosProvider {
   Future<List<Producto>> getProductos() async {
     print('aqui el url : $_url');
     if (_cargando) {
-      print('getProductos $_paginaEnProductos');
+      //print('getProductos $_paginaEnProductos');
       return [];
     } else {
       _cargando = true;
     }
 
     _paginaEnProductos++;
-    // print('getgmdApp $_paginaEngmdApp');
-    //final url = Uri.https(_url, '3/movie/popular', {
-    //final url1 = Uri.http(_url);
-
-    //final url = Uri.http(_url, '', {
-    //  'api_key': _apikey,
-    //  'language': _lenguaje,
-    //  'page': _paginaEngmdApp.toString(),
-    // });
-    /*
-    final _url = "example.com/api/";
-final _uri = Uri.https(path: _url, queryParameters: _params);
-    */
-    //var uri = Uri.http(_url, '/productos', {'q': 'dart'});
-    var uri = Uri.http(_url, '/productos');
-    print(uri); // http://example.org/path?q=dart
-
-    //uri = Uri.http('user:password@localhost:8080', '');
-    //print(uri); // http://user:password@localhost:8080
-
-    //uri = Uri.http('example.org', 'a b');
-    //print(uri); // http://example.org/a%20b
-
-    //uri = Uri.http('example.org', '/a%2F');
-    //print(uri); // http://example.org/a%252F
-//The scheme is always set to http.
-
-//The userInfo, host and port components are set from the [authority] argument. If authority is null or empty, the created Uri has no authority, and isn't directly usable as an HTTP URL, which must have a non-empty host.
-
-//The path component is set from the [unencodedPath] argument. The path passed must not be encoded as this constructor encodes the path. Only / is recognized as path separtor. If omitted, the path defaults to being empty.
-
-//The query component is set from the optional [queryParameters] argument.
-
-    //final url = Uri.http(_url, "/productos");
     var url = Uri.http(_url, '/d3xd/productos');
     print('la url full : $url');
 
@@ -158,20 +113,12 @@ final _uri = Uri.https(path: _url, queryParameters: _params);
     return ver;
   }
 
-  Future<List<Producto>> GetProducto(String codigoBarra) async {
-    // search/movie
-    //print("**************" + codigoBarra);
+  Future<List<Producto>> getProducto(String codigoBarra) async {
     final url = Uri.http(_url, '/d3xd/barcode', {
       //'api_key': _apikey,
       //'language': _lenguaje,
       'buscar': codigoBarra,
     });
-
-    //final ver = await _procesarRespuesta(url);
-    //print("*******GetProducto***********************" + codigoBarra);
-    // print(ver);
-    // print(ver.length);
-    //print("***************************************");
 
     final respuesta = await _procesarRespuesta(url);
 
@@ -185,5 +132,28 @@ final _uri = Uri.https(path: _url, queryParameters: _params);
     return respuesta;
 
     //return ver;
+  }
+
+  Future<String> grbarCodigoDeBarraEnD3xdProductoas(
+      String codigoProducto, String codigoBarra) async {
+    //{"id": "0001234","codBarra": "aI216072806399"}
+    final codigoDeBarra = {'id': codigoProducto, 'codBarra': codigoBarra};
+
+    final url = Uri.http(
+      _url,
+      '/d3xd/barcode',
+    );
+    //final resp = await http.post(url, body: json.encode(codigoDeBarra));
+    final resp = await http.post(url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(codigoDeBarra));
+
+    if (resp.statusCode == 200) {
+      return "Se Guardo el código de Barra Satisfactoriamente!. ";
+    }
+
+    //print(resp.body.length);
+
+    return resp.body.toString();
   }
 }

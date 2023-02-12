@@ -93,7 +93,7 @@ class Producto {
     pmedida = json['pmedida'];
     pmedempaque = json['pmedempaque'];
     pexiste = json['pexiste'] / 1;
-    pintercode = json['pdepartamento'];
+    pintercode = json['pintercode'];
     pmoneydif = json['pmoneydif'];
     ptasac = json['ptasac'] / 1;
   }

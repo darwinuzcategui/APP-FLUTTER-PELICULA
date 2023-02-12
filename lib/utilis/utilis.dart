@@ -54,7 +54,7 @@ void showAlertgmd(BuildContext context, String message) {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Informacion Incorrecta"),
+          title: Text("Información"),
           content: Text(message),
           actions: <Widget>[
             TextButton(

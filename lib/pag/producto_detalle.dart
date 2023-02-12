@@ -1,5 +1,11 @@
+import 'dart:async';
+
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:productos/providers/productos_providers.dart';
 import '../models/productos_model.dart';
+import '../utilis/utilis.dart' as util;
 
 class ProductoDetalle extends StatelessWidget {
   // esta en una forma final Pelicula pelicula;
@@ -10,7 +16,7 @@ class ProductoDetalle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Producto producto = ModalRoute.of(context).settings.arguments;
-    
+
     var pmoneydif = producto.pmoneydif;
     var moneda = (pmoneydif == 1)
         ? "\$."
@@ -50,7 +56,7 @@ class ProductoDetalle extends StatelessWidget {
     return Scaffold(
         body: CustomScrollView(
       slivers: <Widget>[
-        _crearAppbar(producto),
+        _crearAppbar(context, producto),
         SliverList(
           delegate: SliverChildListDelegate(
             [
@@ -95,33 +101,43 @@ class ProductoDetalle extends StatelessWidget {
     ));
   }
 
-  Widget _crearAppbar(Producto producto) {
+  Widget _crearAppbar(BuildContext context, Producto producto) {
     return SliverAppBar(
-      elevation: 2.0,
-      backgroundColor: Colors.orange,
-      expandedHeight: 200.0,
-      floating: false,
-      pinned: true,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        title: Text(
-          producto.pdescribe,
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Color.fromARGB(255, 18, 18, 15),
-              fontSize: 16.0),
-          textAlign: TextAlign.center,
+        elevation: 2.0,
+        backgroundColor: Colors.orange,
+        expandedHeight: 200.0,
+        floating: false,
+        pinned: true,
+        flexibleSpace: FlexibleSpaceBar(
+          centerTitle: true,
+          title: Text(
+            producto.pdescribe,
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 18, 18, 15),
+                fontSize: 16.0),
+            textAlign: TextAlign.center,
+          ),
+          background: FadeInImage(
+            //image: NetworkImage(producto.getFondoImagen()),
+            image: NetworkImage(
+                "https://img.freepik.com/fotos-premium/manos-mujer-joven-escaner-escanear-productos-cliente-gran-centro-comercial_310913-84.jpg?w=826"),
+            placeholder: AssetImage('assets/img/loading.gif'),
+            fadeInDuration: Duration(milliseconds: 150),
+            fit: BoxFit.cover,
+          ),
         ),
-        background: FadeInImage(
-          //image: NetworkImage(producto.getFondoImagen()),
-          image: NetworkImage(
-              "https://img.freepik.com/fotos-premium/manos-mujer-joven-escaner-escanear-productos-cliente-gran-centro-comercial_310913-84.jpg?w=826"),
-          placeholder: AssetImage('assets/img/loading.gif'),
-          fadeInDuration: Duration(milliseconds: 150),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.add_circle),
+            tooltip: 'Add new entry',
+            onPressed: () {
+              //print("grbar algo ");
+              //util.showAlertgmd(context, "Prueba de Grabar");
+              _scan23(context, producto.pcode);
+            },
+          ),
+        ]);
   }
 
   Widget _posterTitulo(BuildContext context, Producto producto) {
@@ -144,40 +160,27 @@ class ProductoDetalle extends StatelessWidget {
           // SizedBox(width: 20.0,),
 
           Flexible(
-            child: Row(
-              //crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                /*
-                Text(
-                  pelicula.pdescribe,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  pelicula.preferencia,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                
-                Text(
-                  producto.pcode.toString(),
-                  style: Theme.of(context).textTheme.titleMedium,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                */
-                Column(
-                  children: <Widget>[
-                    Icon(Icons.barcode_reader),
-                    Text(
-                      producto.pcode.toString(),
-                      style: Theme.of(context).textTheme.titleMedium,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                )
-              ],
+            child: new InkWell(
+              onTap: () {
+                _scan23(context, producto.pcode);
+              },
+              child: Row(
+                //crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Icon(Icons.barcode_reader),
+                      Text(
+                        producto.pcode.toString(),
+                        style: Theme.of(context).textTheme.titleMedium,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -192,59 +195,65 @@ class ProductoDetalle extends StatelessWidget {
       ),
     );
   }
-/*
-  Widget _crearCasting(Producto pelicula) {
-    final peliProvider = new ProductosProvider();
 
-    return FutureBuilder(
-      future: peliProvider.getCastActoresDePelicula(pelicula.pcode.toString()),
-      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-        if (snapshot.hasData) {
-          return _crearActoresPageView(snapshot.data);
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-  }
+  Future<void> _scan23(BuildContext context, String codigo) async {
+    try {
+      final _flashOnController = TextEditingController(text: 'Activar Flash');
+      final _flashOffController =
+          TextEditingController(text: 'Desactivar Flash');
+      final _cancelController = TextEditingController(text: 'Salir');
+      final productoProvider = ProductosProvider();
+      var _aspectTolerance = 0.00;
+      // ignore: unused_field
+      //var _numberOfCameras = 0;
+      var _selectedCamera = -1;
+      var _useAutoFocus = true;
+      var _autoEnableFlash = false;
 
-
-  Widget _crearActoresPageView(List<Actor> actores) {
-    return SizedBox(
-      height: 200.0,
-      child: PageView.builder(
-        pageSnapping: false,
-        controller: PageController(
-          viewportFraction: 0.3,
-          initialPage: 1,
+      // ignore: unused_local_variable
+      final result = await BarcodeScanner.scan(
+        options: ScanOptions(
+          strings: {
+            'cancel': _cancelController.text,
+            'flash_on': _flashOnController.text,
+            'flash_off': _flashOffController.text,
+          },
+          //restrictFormat: selectedFormats,
+          useCamera: _selectedCamera,
+          autoEnableFlash: _autoEnableFlash,
+          android: AndroidOptions(
+            aspectTolerance: _aspectTolerance,
+            useAutoFocus: _useAutoFocus,
+          ),
         ),
-        itemCount: actores.length,
-        itemBuilder: (context, i) => _unActorTarjeta(actores[i]),
-      ),
-    );
-  }
+      );
 
-  Widget _unActorTarjeta(Actor actor) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 3.0),
-      child: Column(
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: FadeInImage(
-              image: NetworkImage(actor.getFoto()),
-              placeholder: AssetImage('assets/img/no-image.jpg'),
-              height: 150.0,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Text(
-            actor.name,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
-    );
+      final String codigoBarra =
+          (result.rawContent != "") ? result.rawContent : "";
+      //String grabar = "";
+      if (codigoBarra.length != null && codigoBarra.length > 2) {
+        util.showAlertgmd(
+            context,
+            await productoProvider.grbarCodigoDeBarraEnD3xdProductoas(
+                codigo, codigoBarra));
+      }
+      //grabar = await productoProvider.grbarCodigoDeBarraEnD3xdProductoas(
+      //codigoBarra, codigo);
+      // ignore: unnecessary_statements
+      //if grabar != null {
+      //util.showAlertgmd(context, grabar);
+      //}
+    } on PlatformException catch (e) {
+      // ignore: unused_local_variable
+      var scanResult = ScanResult(
+        type: ResultType.Error,
+        format: BarcodeFormat.unknown,
+        rawContent: e.code == BarcodeScanner.cameraAccessDenied
+            ? '¡El usuario no le dio permiso a la cámara!'
+            : 'Error desconocido: $e',
+      );
+      //aqui voy ver
+      // util.showAlertgmd(context, ' $scanResult.rawContent aqui va el $codigo ');
+    }
   }
-  */
 }

@@ -28,7 +28,7 @@ class BuscarDatos extends SearchDelegate {
       IconButton(
         icon: Icon(Icons.clear),
         onPressed: () {
-          print('click !!!');
+          //print('click !!!');
           query = '';
         },
       )
@@ -44,7 +44,7 @@ class BuscarDatos extends SearchDelegate {
         progress: transitionAnimation,
       ),
       onPressed: () {
-        print('Leading Icons Press ');
+        //print('Leading Icons Press ');
         close(context, null);
       },
     );
@@ -74,7 +74,7 @@ class BuscarDatos extends SearchDelegate {
     return FutureBuilder(
       future: productosProvider.buscarD3xdProductos(query),
       builder: (BuildContext context, AsyncSnapshot<List<Producto>> snapshot) {
-        print(query);
+        //print(query);
         if (snapshot.hasData) {
           final productos = snapshot.data;
 
@@ -91,11 +91,11 @@ class BuscarDatos extends SearchDelegate {
               title: Text(producto.pdescribe),
               subtitle: Text(producto.pventa1.toStringAsPrecision(3)),
               onTap: () {
-                print('pulsaste aqui');
-                print(query);
+                //print('pulsaste aqui');
+                //print(query);
                 //primero cerramos la busqueda
                 close(context, null);
-                producto.pcode = '';
+                //producto.pcode = '';
                 //producto.pcode = 0;
                 Navigator.pushNamed(context, 'detalle', arguments: producto);
               },

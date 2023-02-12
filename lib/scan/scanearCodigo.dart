@@ -70,8 +70,8 @@ class _AppState extends State<ScanearCodigo> {
     //final codigo = this.codigo;
     if (scanResult != null) {
       //final productosProvider = new ProductosProvider();
-      productosProvider.GetProducto(scanResult.rawContent);
-      //print("***1111111111111*******************");
+      productosProvider.getProducto(scanResult.rawContent);
+      
 
       //print((producto.pcode != null) ? producto.pcode : "codigo texto");
     }
@@ -200,7 +200,7 @@ class _AppState extends State<ScanearCodigo> {
     final productosProvider = new ProductosProvider();
     //var scanResult;
     return FutureBuilder(
-      future: productosProvider.GetProducto(codigoBarra),
+      future: productosProvider.getProducto(codigoBarra),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         //if (snapshot.data.length == 1) {
         if (snapshot.hasData) {

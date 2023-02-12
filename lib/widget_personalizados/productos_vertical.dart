@@ -100,7 +100,7 @@ class ProductosVertical extends StatelessWidget {
     return GestureDetector(
       child: productoTarjeta,
       onTap: () {
-        print('Pulsaste click aqui! el de la producto es Id ${producto.pcode}');
+        //print('Pulsaste click aqui! el de la producto es Id ${producto.pcode}');
         // Navigator.pushNamed(context, '/', arguments: producto);
         // Navigator.pushNamed(context, 'detalle', arguments: producto);
         _dialogBuilder(context, producto);

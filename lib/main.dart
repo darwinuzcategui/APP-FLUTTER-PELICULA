@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:productos/pag/acerca_pagina.dart';
 import 'package:productos/pag/configuracion_pagina.dart';
+import 'package:productos/pag/prueba.dart';
 import 'package:productos/providers/provider.dart';
 import 'package:productos/scan/scanearCodigo.dart';
 import '../pag/inicio_pagina.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         ProductoDetalle.routerName: (BuildContext context) => ProductoDetalle(),
         ScanearCodigo.routerName: (BuildContext context) => ScanearCodigo(),
         AcercaPagina.routerName: (BuildContext context) => AcercaPagina(),
+        Prueba.routerName: (BuildContext context) => Prueba(),
         ConfiguracionPagina.routerName: (BuildContext context) =>
             ConfiguracionPagina(),
         //darwin

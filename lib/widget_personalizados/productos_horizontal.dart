@@ -42,7 +42,7 @@ class ProductosHorizontal extends StatelessWidget {
   }
 
   Widget _unaTarjeta(BuildContext context, Producto producto) {
-    producto.pcode = '*${producto.pcode}*';
+    producto.pcode = '${producto.pcode}';
 
     var pmoneydif = producto.pmoneydif;
     var moneda = (pmoneydif == 1)
