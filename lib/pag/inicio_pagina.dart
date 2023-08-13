@@ -26,7 +26,7 @@ class InicioPagina extends StatelessWidget {
     prefs.ultimaPagVisitada = InicioPagina.routerName;
     //final bloc = Provider.of(context);
     //productosProvider.getProductos();
-    gastosProvider.getGastosDeDosTorres();
+    gastosProvider.getGastos();
     //final  FloatingActionButton floatingActionButton:
     // _botonesFlotantes();
     return Scaffold(
