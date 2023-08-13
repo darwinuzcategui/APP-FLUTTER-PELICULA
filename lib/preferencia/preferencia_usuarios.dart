@@ -61,8 +61,8 @@ class PreferenciaUsuarios {
 
   // GET y SET del urlBase
   String get urlbase {
-    return _prefs.getString('urlbase') ??
-        'backen-producto-production.up.railway.app';
+    return _prefs.getString('urlbase') ?? '192.168.1.4:5504';
+    // 'backen-producto-production.up.railway.app';
   }
 
   set urlbase(String value) {

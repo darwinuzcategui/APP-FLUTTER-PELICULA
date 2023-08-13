@@ -6,13 +6,16 @@ import '../preferencia/preferencia_usuarios.dart';
 //import '../providers/provider.dart';
 import '../scan/scanearCodigo.dart';
 import '../providers/productos_providers.dart';
-import '../widget_personalizados/card_swiper_widget.dart';
+import '../providers/gastos_providers.dart';
+//import '../widget_personalizados/card_swiper_widget.dart';
+import '../widget_personalizados/card_swiper_widget_gastos.dart';
 import '../widget_personalizados/menu_lateral_widget.dart';
-import '../widget_personalizados/productos_horizontal.dart';
+import '../widget_personalizados/gastos_horizontal.dart';
 
 class InicioPagina extends StatelessWidget {
   // const InicoPagina({Key key}) : super(key: key);
   final productosProvider = new ProductosProvider();
+  final gastosProvider = new GastosProvider();
   final prefs = new PreferenciaUsuarios();
   static final String routerName = 'inicio';
   final llame = "INICIOPAGINA";
@@ -22,7 +25,8 @@ class InicioPagina extends StatelessWidget {
     // aqui cuando se ejecuta
     prefs.ultimaPagVisitada = InicioPagina.routerName;
     //final bloc = Provider.of(context);
-    productosProvider.getProductos();
+    //productosProvider.getProductos();
+    gastosProvider.getGastosDeDosTorres();
     //final  FloatingActionButton floatingActionButton:
     // _botonesFlotantes();
     return Scaffold(
@@ -73,11 +77,11 @@ class InicioPagina extends StatelessWidget {
 
   Widget _swiperTarjeta() {
     return FutureBuilder(
-      future: productosProvider.getProductosDeD3xd(),
+      future: gastosProvider.getGastosDeDosTorres(),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if (snapshot.hasData) {
           //print(snapshot.data);
-          return CardSwiper(productos: snapshot.data, quienMellamo: llame);
+          return CardSwiperGastos(gastos: snapshot.data, quienMellamo: llame);
         } else {
           return Container(
               height: 300.0, child: Center(child: CircularProgressIndicator()));
@@ -94,7 +98,7 @@ class InicioPagina extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(left: 10.0),
-            child: Text("Productos Ordenado x Existencia..",
+            child: Text("Gastos Ordenado x Cod..",
                 //Theme.of(context).textTheme.subtitle1
                 //  style: Theme.of(context).textTheme.subhead),
                 style: Theme.of(context).textTheme.titleMedium),
@@ -102,13 +106,13 @@ class InicioPagina extends StatelessWidget {
           SizedBox(height: 0.5),
           StreamBuilder(
             // esto es observarble que se ejecuta cada vez que cambie el stream
-            stream: productosProvider.gmdAppListaProductostream,
+            stream: gastosProvider.gmdAppListaGastostream,
             builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
               // snapshot.data?.forEach((peli)=> print(peli.title));
               if (snapshot.hasData) {
                 // print(snapshot.data);
-                return ProductosHorizontal(
-                  productos: snapshot.data,
+                return GastosHorizontal(
+                  gastos: snapshot.data,
                   //  siguientePagina: productosProvider.getProductos(),
                 );
               } else {
