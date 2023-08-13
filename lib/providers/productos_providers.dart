@@ -67,7 +67,7 @@ class ProductosProvider {
 
   Future<List<Producto>> getProductosDeD3xd() {
     print("getProductosDeD3xd() " + _url);
-    final url = Uri.http(_url, '/d3xd/productos');
+    final url = Uri.https(_url, '/d3xd/productos');
 
     print(url);
 
@@ -84,7 +84,7 @@ class ProductosProvider {
     }
 
     _paginaEnProductos++;
-    var url = Uri.http(_url, '/d3xd/productos');
+    var url = Uri.https(_url, '/d3xd/productos');
     print('la url full : $url');
 
     final respuesta = await _procesarRespuesta(url);
@@ -101,7 +101,7 @@ class ProductosProvider {
 
   Future<List<Producto>> buscarD3xdProductos(String terminoABuscar) async {
     // search/movie
-    final url = Uri.http(_url, '/d3xd/buscar', {
+    final url = Uri.https(_url, '/d3xd/buscar', {
       //'api_key': _apikey,
       //'language': _lenguaje,
       'buscar': terminoABuscar,
@@ -114,7 +114,7 @@ class ProductosProvider {
   }
 
   Future<List<Producto>> getProducto(String codigoBarra) async {
-    final url = Uri.http(_url, '/d3xd/barcode', {
+    final url = Uri.https(_url, '/d3xd/barcode', {
       //'api_key': _apikey,
       //'language': _lenguaje,
       'buscar': codigoBarra,
@@ -143,7 +143,7 @@ class ProductosProvider {
     print(codigoDeBarra);
     print("*************************************");
 
-    final url = Uri.http(
+    final url = Uri.https(
       _url,
       '/d3xd/barcode',
     );
